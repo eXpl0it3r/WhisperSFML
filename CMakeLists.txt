@@ -2,11 +2,16 @@ cmake_minimum_required(VERSION 3.21)
 project(WhisperSFML LANGUAGES CXX)
 
 include(FetchContent)
+
+FetchContent_Declare(WHISPERCPP GIT_REPOSITORY https://github.com/ggerganov/whisper.cpp.git)
+FetchContent_MakeAvailable(WHISPERCPP)
+
 FetchContent_Declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git)
 FetchContent_MakeAvailable(SFML)
 
 add_executable(WhisperSFML src/main.cpp)
-target_link_libraries(WhisperSFML PRIVATE sfml-graphics sfml-audio)
+
+target_link_libraries(WhisperSFML PRIVATE SFML::Graphics SFML::Audio whisper)
 target_compile_features(WhisperSFML PRIVATE cxx_std_17)
 
 if (WIN32 AND BUILD_SHARED_LIBS)
