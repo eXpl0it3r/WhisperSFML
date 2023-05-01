@@ -89,7 +89,7 @@ int main()
         return -1;
     }
 
-    auto text = sf::Text{"Hello World!", font, 16};
+    auto text = sf::Text{font, "Hello World!", 16};
     auto string = std::string{};
 
     auto sound = sf::Sound{buffer};
