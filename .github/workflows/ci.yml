@@ -11,11 +11,10 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows VS2019, os: windows-2019 }
-        - { name: Windows VS2022, os: windows-2022 }
-        - { name: Linux GCC,      os: ubuntu-20.04 }
-        - { name: Linux Clang,    os: ubuntu-20.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
-        - { name: MacOS XCode,    os: macos-12 }
+        - { name: Windows,     os: windows-2025 }
+        - { name: Linux GCC,   os: ubuntu-24.04 }
+        - { name: Linux Clang, os: ubuntu-24.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
+        - { name: macOS,       os: macos-14 }
         config:
         - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
         - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
@@ -23,10 +22,10 @@ jobs:
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev
+      run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libfreetype-dev libharfbuzz-dev libgl1-mesa-dev libegl1-mesa-dev
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     - name: Configure
       shell: bash

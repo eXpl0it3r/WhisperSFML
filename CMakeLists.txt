@@ -1,15 +1,27 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.31)
 project(WhisperSFML LANGUAGES CXX)
 
-include(FetchContent)
+if(APPLE)
+    enable_language(OBJC)
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-FetchContent_Declare(WHISPERCPP GIT_REPOSITORY https://github.com/ggerganov/whisper.cpp.git)
+include(FetchContent)
+
+FetchContent_Declare(WHISPERCPP
+    GIT_REPOSITORY https://github.com/ggml-org/whisper.cpp.git
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
 FetchContent_MakeAvailable(WHISPERCPP)
 
-FetchContent_Declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
 add_executable(WhisperSFML src/main.cpp)
