@@ -68,7 +68,8 @@ int main()
     }
 
     auto convertedSamples = convertTo32BitFloat(buffer);
-    auto* context = whisper_init_from_file("res/ggml-model-whisper-small.bin");
+    auto contextParams = whisper_context_default_params();
+    auto* context = whisper_init_from_file_with_params("res/ggml-model-whisper-small.bin", contextParams);
 
     auto processing = std::async(std::launch::async, [&context, &convertedSamples]()
     {
