@@ -7,7 +7,7 @@ demonstrate real-time audio transcription (Speak-To-Text) as well as translation
 
 - Get the WhisperSFML source code
 - Make sure CMake and a compiler is installed
-- Get one of [model files in the ggml format](https://huggingface.co/datasets/ggerganov/whisper.cpp/tree/main)
+- Get one of [model files in the ggml format](https://huggingface.co/ggerganov/whisper.cpp/tree/main)
   - *I recommend at least base or small*
 - (optional) Pick some sound file of your desire
 - Replace the filenames in the source files
@@ -19,7 +19,7 @@ demonstrate real-time audio transcription (Speak-To-Text) as well as translation
 ## Resources
 
 - [OpenAI Whisper](https://openai.com/blog/whisper/)
-- [Whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+- [Whisper.cpp](https://github.com/ggml-org/whisper.cpp)
 - [SFML](https://github.com/SFML/SFML)
 
 ## License
