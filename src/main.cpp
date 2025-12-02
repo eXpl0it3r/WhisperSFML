@@ -83,7 +83,7 @@ int main()
     window.setFramerateLimit(30);
 
     auto font = sf::Font{};
-    if (!font.loadFromFile("res/LinLibertine_R.ttf"))
+    if (!font.openFromFile("res/LinLibertine_R.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return -1;
@@ -97,9 +97,9 @@ int main()
 
     while (window.isOpen())
     {
-        for (auto event = sf::Event{}; window.pollEvent(event);)
+        while (const std::optional event = window.pollEvent())
         {
-            if (event.type == sf::Event::Closed)
+            if (event->is<sf::Event::Closed>())
             {
                 window.close();
             }
