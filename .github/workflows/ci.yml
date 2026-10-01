@@ -2,6 +2,17 @@ name: CI
 
 on: [push, pull_request, workflow_dispatch]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
@@ -11,10 +22,10 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows,     os: windows-2025 }
-        - { name: Linux GCC,   os: ubuntu-24.04 }
-        - { name: Linux Clang, os: ubuntu-24.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
-        - { name: macOS,       os: macos-14 }
+        - { name: Windows VS2026, os: windows-2025 }
+        - { name: Linux GCC,      os: ubuntu-26.04 }
+        - { name: Linux Clang,    os: ubuntu-26.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
+        - { name: macOS Xcode,    os: macos-26 }
         config:
         - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
         - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
@@ -22,19 +33,20 @@ jobs:
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libfreetype-dev libharfbuzz-dev libgl1-mesa-dev libegl1-mesa-dev
+      run: sudo apt-get update && sudo apt-get install libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libfreetype-dev libharfbuzz-dev libgl1-mesa-dev libegl1-mesa-dev libmbedtls-dev libssh2-1-dev
 
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Configure
-      shell: bash
-      run: cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install ${{matrix.platform.flags}} ${{matrix.config.flags}}
+      env:
+        CMAKE_FLAGS: ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
+      run: cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install $CMAKE_FLAGS
 
     - name: Build
-      shell: bash
       run: cmake --build build --config Release
 
     - name: Install
-      shell: bash
       run: cmake --install build --config Release
